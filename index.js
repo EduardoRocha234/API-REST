@@ -2,7 +2,9 @@ const express = require('express');
 const app = express();
 const connection = require('./database/database');
 const Game = require('./database/Game');
+const cors = require('cors')
 
+app.use(cors())
 // db
 connection
     .authenticate()
