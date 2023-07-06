@@ -6,11 +6,6 @@ Esta documentação fornece uma visão geral dos endpoints disponíveis na API d
 
 ### Autenticação
 
-
-# Documentação - API de Usuários
-
-Esta documentação fornece uma visão geral dos endpoints disponíveis na API de Usuários. A API é construída usando o Express.js e inclui funcionalidades de criação de usuários e autenticação.
-
 ## Endpoints
 
 ### 1. Criar Usuário
@@ -63,6 +58,28 @@ Para usar a API de Usuários, faça requisições HTTP para os endpoints apropri
 - Autenticação necessária: Sim
 
 Este endpoint recupera todos os jogos do banco de dados.
+Exemplo de Resposta:
+```
+[
+    {
+        "id": 2,
+        "title": "Call of duty BO2 - Gold Edition",
+        "year": 2023,
+        "price": 390,
+        "createdAt": "2023-07-03T01:35:17.000Z",
+        "updatedAt": "2023-07-05T01:27:00.000Z"
+    },
+    {
+        "id": 9,
+        "title": "HORIZON",
+        "year": 2023,
+        "price": 400,
+        "createdAt": "2023-07-05T01:49:39.000Z",
+        "updatedAt": "2023-07-05T01:49:39.000Z"
+    }
+]
+
+```
 
 #### Requisição
 
@@ -90,6 +107,21 @@ Este endpoint recupera um jogo específico pelo seu ID.
 
 - Código de status: 200 (OK)
 - Corpo da resposta: Objeto de jogo
+
+- Exemplo de Respota:
+```
+
+[
+    {
+        "id": 2,
+        "title": "Call of duty BO2 - Gold Edition",
+        "year": 2023,
+        "price": 390,
+        "createdAt": "2023-07-03T01:35:17.000Z",
+        "updatedAt": "2023-07-05T01:27:00.000Z"
+    }
+]
+```
 
 Se o jogo com o ID especificado não for encontrado, a API responderá com o código de status 404 (Não encontrado).
 
