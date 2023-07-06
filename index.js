@@ -3,6 +3,10 @@ const app = express();
 const connection = require('./database/database');
 const Game = require('./database/Game');
 const cors = require('cors')
+const auth = require('./users/midleware')
+
+const usersController = require('./users/UsersController')
+const User = require('./users/User');
 
 app.use(cors())
 // db
@@ -14,15 +18,17 @@ connection
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
-app.get('/games', (req, res) => {
+app.use('/', usersController)
+
+app.get('/games', auth, (req, res) => {
     req.statusCode = 200
-    Game.findAll({order: [['id', 'DESC']]})
+    Game.findAll()
         .then(games => {
             res.json(games)
         })
 })
 
-app.get('/game/:id', (req, res) => {
+app.get('/game/:id', auth, (req, res) => {
     const id = parseInt(req.params.id)
     if(isNaN(id)) {
         res.sendStatus(400)
@@ -42,7 +48,7 @@ app.get('/game/:id', (req, res) => {
     }
 })
 
-app.post('/game', (req, res) => {
+app.post('/game', auth, (req, res) => {
     const { title, price, year} = req.body
     Game.create({
         title,
@@ -53,7 +59,7 @@ app.post('/game', (req, res) => {
     .catch(() => res.sendStatus(400));
 })
 
-app.delete('/game/:id', (req, res) => {
+app.delete('/game/:id', auth, (req, res) => {
     const id = parseInt(req.params.id)
     if(isNaN(id)) {
         res.sendStatus(400)
@@ -66,7 +72,7 @@ app.delete('/game/:id', (req, res) => {
     }
 })
 
-app.put('/game/:id', (req, res) => {
+app.put('/game/:id', auth, (req, res) => {
     const id = parseInt(req.params.id)
     if(isNaN(id)) {
         res.sendStatus(400)
