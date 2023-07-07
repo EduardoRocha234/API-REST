@@ -21,23 +21,64 @@ app.use(express.json())
 app.use('/', usersController)
 
 app.get('/games', auth, (req, res) => {
+    const HATEOAS = [
+        {
+            href: "http://localhost:8080/game/0",
+            method: 'DELETE',
+            rel: "delete_game",
+        },
+        {
+            href: "http://localhost:8080/game/0",
+            method: 'GET',
+            rel: "get_game",
+        },
+        {
+            href: "http://localhost:8080/auth",
+            method: 'POST',
+            rel: "login",
+        },
+    ]
     req.statusCode = 200
     Game.findAll()
         .then(games => {
-            res.json(games)
+            res.json({games, _links: HATEOAS})
         })
 })
 
 app.get('/game/:id', auth, (req, res) => {
     const id = parseInt(req.params.id)
+
     if(isNaN(id)) {
         res.sendStatus(400)
     } else {
+        const HATEOAS = [
+            {
+                href: `http://localhost:8080/game/${id}`,
+                method: 'DELETE',
+                rel: "delete_game",
+            },
+            {
+                href: `http://localhost:8080/game/${id}`,
+                method: 'PUT',
+                rel: "edit_game",
+            },
+            {
+                href: `http://localhost:8080/game/${id}`,
+                method: 'GET',
+                rel: "get_game",
+            },
+            {
+                href: `http://localhost:8080/games`,
+                method: 'GET',
+                rel: "get_all_games",
+            },
+        ]
+
         Game.findByPk(id)
             .then(game => {
                 if(game != null || game != undefined) {
                     res.statusCode = 200
-                    res.json(game) 
+                    res.json({game, _links: HATEOAS}) 
                 } else {
                     res.sendStatus(404)
                 }
@@ -50,6 +91,7 @@ app.get('/game/:id', auth, (req, res) => {
 
 app.post('/game', auth, (req, res) => {
     const { title, price, year} = req.body
+
     Game.create({
         title,
         price,
